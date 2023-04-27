@@ -617,3 +617,7 @@ yourself
 yourselves
 z
 zero
+"
+'
+“
+President
