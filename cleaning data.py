@@ -46,9 +46,11 @@ def remove_pattern(text):
 
 
 for count in range(len(speech_df["Main text"])):
-    # raw_text = speech_df["Main text"][count]
-    # raw_text = remove_sentence(raw_text)
-    # raw_text, speech_df["QA"][count] = split_text(raw_text)
+    # speech_df["Date Time"] = speech_df["Date Time"].str.replace("T", "")
+
+    raw_text = speech_df["Main text"][count]
+    raw_text = remove_sentence(raw_text)
+    raw_text, speech_df["QA"][count] = split_text(raw_text)
     speech_df["Main text"][count] = remove_pattern(speech_df["Main text"][count])
 
 

@@ -7,8 +7,11 @@ from sklearn.decomposition import LatentDirichletAllocation
 from nltk.stem import WordNetLemmatizer, PorterStemmer, SnowballStemmer
 import pandas as pd
 import re as re
+import numpy as np
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
+import pandas as pd
+from transformers import pipeline
 
 
 # Step 1: Preprocessing
@@ -40,8 +43,8 @@ def preprocess(text):
     stop_words = stop_words
     tokens = [token for token in tokens if token not in stop_words]
     # Perform lemmatization
-    lemmatizer = WordNetLemmatizer()  # WordNetLemmatizer()
-    tokens = [lemmatizer.lemmatize(token) for token in tokens]
+    lemmatizer = PorterStemmer()  # WordNetLemmatizer()
+    tokens = [lemmatizer.stem(token) for token in tokens]
 
     return tokens
 
@@ -103,8 +106,43 @@ def create_word_clouds(lda, feature_names, n_top_words):
         plt.savefig(f"wordcloud/topic_{topic_idx}.png", bbox_inches="tight")
 
 
+def analyze_sentiment(df: pd.DataFrame, max_length: int = 512) -> pd.DataFrame:
+    # Load pre-trained BERT model for sentiment analysis
+    nlp = pipeline("sentiment-analysis")
+
+    # Create a new column to store the sentiment scores
+    df["sentiment_score"] = 0.0
+
+    # Iterate over the rows of the DataFrame and predict the sentiment of each speech
+    for i, row in df.iterrows():
+        text = row["Main text"]
+        scores = []
+        for j in range(0, len(text), max_length):
+            chunk = text[j : j + max_length]
+            result = nlp(chunk)[0]
+            score = (
+                result["score"] if result["label"] == "POSITIVE" else -result["score"]
+            )
+            scores.append(score)
+        avg_score = np.mean(scores)
+        df.at[i, "sentiment_score"] = avg_score
+
+    return df
+
+
+def graph_printing(df: pd.DataFrame):
+    dates = df["Date Time"]
+    scores = df["sentiment_score"]
+
+    plt.plot(dates, scores)
+    plt.xlabel("Date")
+    plt.ylabel("Sentiment Score")
+    plt.title("Sentiment Analysis Results")
+    plt.show()
+
+
 df = pd.read_csv("Extraction.csv", sep=",")
-"""documents = df[
+documents = df[
     (df["Date Time"].str.contains("2020"))
     & (df["Title"].str.contains("Press Bri"))
     & (
@@ -114,9 +152,8 @@ df = pd.read_csv("Extraction.csv", sep=",")
         | df["Speaker"].str.contains("president")
     )
 ].loc[:, "Main text"]
-"""
 
-documents = df[(df["Date Time"].str.contains("2020"))].loc[:, "Main text"]
+# documents = df[(df["Date Time"].str.contains("2020"))].loc[:, "Main text"]
 # Preprocess the documents and create a document-term matrix
 document_term_matrix, feature_names = create_document_term_matrix(documents)
 
@@ -128,3 +165,15 @@ analyze_results(lda, feature_names, 20)
 
 # This will create and display a word cloud for each topic using the top 5 words.
 create_word_clouds(lda, feature_names, 20)
+
+df = analyze_sentiment(df)
+
+# printing results
+graph_printing(df)
+
+# Search for available sentiment analysis models
+models = pipeline("sentiment-analysis", model=None)
+
+# Print the names of the available models
+for model in models:
+    print(model["name"])

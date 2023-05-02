@@ -620,4 +620,8 @@ zero
 "
 '
 “
-President
+president
+trump
+mr
+great
+applause
