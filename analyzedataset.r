@@ -1,4 +1,5 @@
 setwd(getwd())
+
 data <- read.csv("Analysis_2.csv", header = TRUE)
 View(data)
 attach(data)
@@ -12,7 +13,7 @@ is.Na
 
 # Trump adm
 # Filter data frame by Administration and Title
-df <- data[data$Administration == "Trump"] # & grepl('Press Briefing', data$Title), ]
+df <- data[data$Administration == "Trump", ] # & grepl('Press Briefing', data$Title), ]
 
 df$UI_norm <- scale(df$UI) # scaling
 install.packages(c("xts", "zoo", "MultipleBubbles", "aTSA", "urca", "flexmix", "forecast", "vars", "ggplot2", "knitr", "erer"))
@@ -204,6 +205,8 @@ title(main = "Time Series of Sentiment Score and UI")
 
 timeseries <- ts(df_xts$sentiment_score)
 out <- time_series_plot(timeseries)
+
+
 kable(out[[7]])
 
 print("Without constant and without time trend")
@@ -337,6 +340,24 @@ legend(-1.5, -1.5, legend = "Eigenvalues", pch = 19)
 oir <- irf(var_model_lev,
     impulse = colnames(df_xts)[1],
     response = colnames(df_xts)[2], n.ahead = 25,
+    ortho = TRUE, runs = 100, seed = 12345
+)
+plot(oir)
+oir <- irf(var_model_lev,
+    impulse = colnames(df_xts)[1],
+    response = colnames(df_xts)[1], n.ahead = 25,
     ortho = TRUE, runs = 1000, seed = 12345
+)
+plot(oir)
+oir <- irf(var_model_lev,
+    impulse = colnames(df_xts)[2],
+    response = colnames(df_xts)[2], n.ahead = 25,
+    ortho = TRUE, runs = 100, seed = 12345
+)
+plot(oir)
+oir <- irf(var_model_lev,
+    impulse = colnames(df_xts)[2],
+    response = colnames(df_xts)[1], n.ahead = 25,
+    ortho = TRUE, runs = 100, seed = 12345
 )
 plot(oir)
