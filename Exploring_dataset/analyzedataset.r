@@ -1,6 +1,6 @@
-setwd(getwd())
+setwd("/Users/riccardodalcero/Library/CloudStorage/OneDrive-UniversitaCattolicaSacroCuore-ICATT/Materials/RA/")
 
-data <- read.csv("Analysis_2.csv", header = TRUE)
+data <- read.csv("Data/4_Data_with_AI_Market_Indicies.csv", header = TRUE)
 View(data)
 attach(data)
 result <- sum(nchar(QA) > 0)
