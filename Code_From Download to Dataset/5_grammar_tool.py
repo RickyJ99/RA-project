@@ -15,6 +15,18 @@ import pandas as pd
 
 import subprocess
 
+import re
+
+
+def limit_text(text, max_length):
+    # Remove irregular characters except punctuation using regular expression
+    cleaned_text = re.sub(r'[^a-zA-Z0-9\s\.,;?!\'"\(\)\[\]\{\}<>]', "", text)
+
+    # Limit the text to the maximum length
+    limited_text = cleaned_text[:max_length]
+
+    return limited_text
+
 
 def check_ping():
     target_host = "141.225.61.35"  # Replace with your desired host or IP address
@@ -37,7 +49,7 @@ def check_ping():
 
 
 # Call the function to start the ping check
-check_ping()
+# check_ping()
 
 df = pd.read_csv(
     "/Users/riccardodalcero/Library/CloudStorage/OneDrive-UniversitaCattolicaSacroCuore-ICATT/Materials/RA/Data/4_Data_with_AI_Market_Indicies.csv",
@@ -59,6 +71,7 @@ browser = webdriver.Chrome()
 browser.maximize_window()
 availability = False
 for text in trump_2020.loc[trump_2020.index, "Main text"]:
+    text = limit_text(text, 1000)
     while not availability:
         browser.get("http://141.225.61.35/CohMetrix2017/")
 
@@ -167,6 +180,16 @@ for text in trump_2020.loc[trump_2020.index, "Main text"]:
         # Print the extracted text
         print("Captcha Text:", captcha_text)
         # Reset captcha text if validation failed
-
-        availability = True
+        try:
+            # Check if the captcha validation failed
+            validation_failed = browser.find_element(
+                "xpath",
+                "//title[contains(text(), 'Error')]",
+            )
+            if validation_failed:
+                availability = False  # Reset captcha text if validation failed
+                time.sleep(20)
+        except NoSuchElementException:
+            print("I did it")
+            availability = True
 input("press key...")
