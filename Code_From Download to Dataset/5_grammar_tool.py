@@ -25,7 +25,7 @@ def limit_text(text, max_length):
     # Limit the text to the maximum length
     limited_text = cleaned_text[:max_length]
 
-    return limited_text
+    return cleaned_text
 
 
 def check_ping():
@@ -65,13 +65,18 @@ trump_2020 = df[
     & (df["Administration"].str.contains("Trump"))
 ].loc[:, :]
 
-trump_2020.head(5)
+
 # Create a new Chrome browser instance and navigate to the website
 browser = webdriver.Chrome()
+# Set the page load timeout (in seconds)
+browser.set_page_load_timeout(3000)
+
 browser.maximize_window()
-availability = False
-for text in trump_2020.loc[trump_2020.index, "Main text"]:
+list_text = list(trump_2020.loc[trump_2020.index, "Main text"])
+for count in range(68, len(list_text)):
+    text = list_text[count]
     text = limit_text(text, 1000)
+    availability = False
     while not availability:
         browser.get("http://141.225.61.35/CohMetrix2017/")
 
@@ -177,6 +182,9 @@ for text in trump_2020.loc[trump_2020.index, "Main text"]:
                     captcha_text = ""  # Reset captcha text if validation failed
             except NoSuchElementException:
                 print("I did it")
+                save_button = browser.find_element("name", "Savedata")
+                save_button.click()
+                time.sleep(3)
         # Print the extracted text
         print("Captcha Text:", captcha_text)
         # Reset captcha text if validation failed
@@ -190,6 +198,15 @@ for text in trump_2020.loc[trump_2020.index, "Main text"]:
                 availability = False  # Reset captcha text if validation failed
                 time.sleep(20)
         except NoSuchElementException:
-            print("I did it")
+            # save_button.click()
+
+            print("I did it", count)
             availability = True
+
 input("press key...")
+# <div class="button-container">
+# <form action="/CohMetrix2017/Default/Download" method="post">                        <div>
+#                            <input type="submit" value="Save Data" name="Savedata">
+#                        </div>
+# </form>
+#                </div>
