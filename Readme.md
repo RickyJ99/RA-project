@@ -21,6 +21,14 @@ This folder contains all the code and resources necessary to obtain four databas
     4. `heBERT_sentiment_analysis` with FED uncertainty for sentiment analysis.
     The output is saved in `Data/4_Data_with_AI_Market_Indicies.csv`.
 
+- `5_*.`: This code is useful to prepare the data in order to be processed by the Cohmetrix software (online and
+  offline), and then to return the dataset merging the output with the dataset.
+    1. `5_a_preprocessing_for_grammar.py`: This code imports the necessary libraries and defines a function called limit_text that cleans and limits the length of a given text. It then reads a CSV file into a Pandas DataFrame, filters the DataFrame based on specific conditions, creates a folder to store text files, iterates over the filtered DataFrame, preprocesses the text, and saves each preprocessed text as a separate text file in the output folder.
+    2. `5_b_grammar_tool.py`: This code open the browser and put the text to be process in the textbox, the using AI try
+       to tackle the captcha and after download the results
+    3. `5_c_fromtxttocsv.py`:from Cohmetrix output to csv, given as input the folder that contains the Cohmetrix output of our dataset (in
+        this case only for the Trump dataset) the program returns a csv that merge the dataset of trump speech and the
+        outcome for each speech in cohmetrix
 ## `Data`
 
 This folder contains all the datasets saved after running the respective Python code. For example, dataset 3 is the output of the code 3 in the folder `Code_From Download to Dataset`.
@@ -32,3 +40,6 @@ This folder contains R code to get a quick view of the dataset and the propertie
 ## `Literature review`
 
 This folder contains scientific articles that use a similar method and the citations for the AI models used in the project.
+
+## `VAR`
+In this folder there are the output of the matlab elaboration of VAR

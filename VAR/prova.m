@@ -1,13 +1,17 @@
+%importing data
+Trump = readtable('/Users/riccardodalcero/Library/CloudStorage/OneDrive-UniversitaCattolicaSacroCuore-ICATT/Materials/RA/Data/5_TrumpwithCohmetrix.csv');
+
+
 % Convert the string column to datetime
-%Trump.DateTime = datetime(Trump.DateTime, 'InputFormat', 'yyyy-MM-dd HH:mm:ssXX','TimeZone','UTC');
-%Trump(1,:) = []; %eliminate the first rows containing the title 
+Trump.DateTime = datetime(Trump.DateTime, 'InputFormat', 'yyyy-MM-dd HH:mm:ssXX','TimeZone','UTC');
+Trump(1,:) = []; %eliminate the first rows containing the title 
 
 %setting as time index
-%Trump = table2timetable(Trump, 'RowTimes', 'DateTime');
+Trump = table2timetable(Trump, 'RowTimes', 'DateTime');
 
 % Assuming X and DateTime are already defined
 
-%X = Trump.SYNLE;
+X = Trump.SYNLE;
 
 % Convert DateTime to a datetime array
 DateTime = datetime(Trump.DateTime.Year, Trump.DateTime.Month, Trump.DateTime.Day);
@@ -64,4 +68,3 @@ Z.Properties.VariableNames(2) = "Sent";
 Z.Properties.VariableNames(1) = "SYN";
 
 xlswrite("output.csv",[Z.EPU,Z.SYN,Z.Sent])
-
