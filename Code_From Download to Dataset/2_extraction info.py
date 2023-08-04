@@ -33,6 +33,8 @@ import sys
 
 
 def remove_sentence(text):
+    # remove the initial string present in some records
+    # the code is looking for 'sentence'
     sentence = "\n\n\nShare:\n\n\n\n\nShare on Facebook \n\n\n\nShare on Twitter \n\n\n\nCopy URL to your clipboard \n\n\n\n\n\n\n\t\tAll News\t\n\n\n\n"
     if text.startswith(sentence):
         text = text[len(sentence) :]
@@ -40,6 +42,7 @@ def remove_sentence(text):
 
 
 def split_text(text):
+    # this function split the text when finds 'Q:' indicates the begin of the questions section
     match = re.search(r"\s+Q\s+", text)
     if match:
         split_index = match.start()
