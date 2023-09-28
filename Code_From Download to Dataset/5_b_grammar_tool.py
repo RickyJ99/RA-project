@@ -25,7 +25,7 @@ def limit_text(text, max_length):
     # Limit the text to the maximum length
     limited_text = cleaned_text[:max_length]
 
-    return cleaned_text
+    return limited_text
 
 
 def check_ping():
@@ -59,9 +59,7 @@ df["Date Time"] = pd.to_datetime(df["Date Time"], format="%Y-%m-%d %H:%M:%S%z")
 
 
 trump_2020 = df[
-    (df["Date Time"].dt.year == 2020)
-    & (df["Date Time"].dt.month < 9)
-    & (df["Title"].str.contains("Press Bri"))
+    (df["Title"].str.contains("Press Bri"))
     & (df["Administration"].str.contains("Trump"))
 ].loc[:, :]
 
@@ -69,13 +67,13 @@ trump_2020 = df[
 # Create a new Chrome browser instance and navigate to the website
 browser = webdriver.Chrome()
 # Set the page load timeout (in seconds)
-browser.set_page_load_timeout(3000)
+browser.set_page_load_timeout(30000)
 
 browser.maximize_window()
 list_text = list(trump_2020.loc[trump_2020.index, "Main text"])
-for count in range(68, len(list_text)):
+for count in range(0, len(list_text)):
     text = list_text[count]
-    text = limit_text(text, 1000)
+    text = limit_text(text, 15000)
     availability = False
     while not availability:
         browser.get("http://141.225.61.35/CohMetrix2017/")

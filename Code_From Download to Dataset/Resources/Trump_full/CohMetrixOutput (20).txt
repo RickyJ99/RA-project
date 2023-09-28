@@ -1,0 +1,107 @@
+Number	Label	Label V2.x	Text	Full description
+1	DESPC	READNP	32	Paragraph count, number of paragraphs
+2	DESSC	READNS	50	Sentence count, number of sentences
+3	DESWC	READNW	1647	Word count, number of words
+4	DESPL	READAPL	1.563	Paragraph length, number of sentences in a paragraph, mean
+5	DESPLd	n/a	0.840	Paragraph length, number of sentences in a pragraph, standard deviation
+6	DESSL	READASL	33.200	Sentence length, number of words, mean
+7	DESSLd	n/a	23.008	Sentence length, number of words, standard deviation
+8	DESWLsy	READASW	1.512	Word length, number of syllables, mean
+9	DESWLsyd	n/a	0.816	Word length, number of syllables, standard deviation
+10	DESWLlt	n/a	4.585	Word length, number of letters, mean
+11	DESWLltd	n/a	2.424	Word length, number of letters, standard deviation
+12	PCNARz	n/a	0.460	Text Easability PC Narrativity, z score
+13	PCNARp	n/a	67.720	Text Easability PC Narrativity, percentile
+14	PCSYNz	n/a	-1.448	Text Easability PC Syntactic simplicity, z score
+15	PCSYNp	n/a	7.490	Text Easability PC Syntactic simplicity, percentile
+16	PCCNCz	n/a	-0.522	Text Easability PC Word concreteness, z score
+17	PCCNCp	n/a	30.150	Text Easability PC Word concreteness, percentile
+18	PCREFz	n/a	-0.434	Text Easability PC Referential cohesion, z score
+19	PCREFp	n/a	33.360	Text Easability PC Referential cohesion, percentile
+20	PCDCz	n/a	1.320	Text Easability PC Deep cohesion, z score
+21	PCDCp	n/a	90.490	Text Easability PC Deep cohesion, percentile
+22	PCVERBz	n/a	0.654	Text Easability PC Verb cohesion, z score
+23	PCVERBp	n/a	74.220	Text Easability PC Verb cohesion, percentile
+24	PCCONNz	n/a	-2.392	Text Easability PC Connectivity, z score
+25	PCCONNp	n/a	0.840	Text Easability PC Connectivity, percentile
+26	PCTEMPz	n/a	-0.707	Text Easability PC Temporality, z score
+27	PCTEMPp	n/a	24.200	Text Easability PC Temporality, percentile
+28	CRFNO1	CRFBN1um	0.388	Noun overlap, adjacent sentences, binary, mean
+29	CRFAO1	CRFBA1um	0.653	Argument overlap, adjacent sentences, binary, mean
+30	CRFSO1	CRFBS1um	0.510	Stem overlap, adjacent sentences, binary, mean
+31	CRFNOa	CRFBNaum	0.231	Noun overlap, all sentences, binary, mean
+32	CRFAOa	CRFBAaum	0.479	Argument overlap, all sentences, binary, mean
+33	CRFSOa	CRFBSaum	0.306	Stem overlap, all sentences, binary, mean
+34	CRFCWO1	CRFPC1um	0.089	Content word overlap, adjacent sentences, proportional, mean
+35	CRFCWO1d	n/a	0.088	Content word overlap, adjacent sentences, proportional, standard deviation
+36	CRFCWOa	CRFPCaum	0.058	Content word overlap, all sentences, proportional, mean
+37	CRFCWOad	n/a	0.070	Content word overlap, all sentences, proportional, standard deviation
+38	LSASS1	LSAassa	0.571	LSA overlap, adjacent sentences, mean
+39	LSASS1d	LSAassd	0.249	LSA overlap, adjacent sentences, standard deviation
+40	LSASSp	LSApssa	0.179	LSA overlap, all sentences in paragraph, mean
+41	LSASSpd	LSApssd	0.176	LSA overlap, all sentences in paragraph, standard deviation
+42	LSAPP1	LSAppa	0.227	LSA overlap, adjacent paragraphs, mean
+43	LSAPP1d	LSAppd	0.205	LSA overlap, adjacent paragraphs, standard deviation
+44	LSAGN	LSAGN	0.176	LSA given/new, sentences, mean
+45	LSAGNd	n/a	0.137	LSA given/new, sentences, standard deviation
+46	LDTTRc	TYPTOKc	0.287	Lexical diversity, type-token ratio, content word lemmas
+47	LDTTRa	n/a	0.126	Lexical diversity, type-token ratio, all words
+48	LDMTLD	LEXDIVTD	0.637	Lexical diversity, MTLD, all words
+49	LDVOCD	LEXDIVVD	0.370	Lexical diversity, VOCD, all words
+50	CNCAll	CONi	79.801	All connectives incidence
+51	CNCCaus	CONCAUSi	128.471	Causal connectives incidence
+52	CNCLogic	CONLOGi	97.754	Logical connectives incidence
+53	CNCADC	CONADVCONi	31.573	Adversative and contrastive connectives incidence
+54	CNCTemp	CONTEMPi	38.859	Temporal connectives incidence
+55	CNCTempx	CONTEMPEXi	18.822	Expanded temporal connectives incidence
+56	CNCAdd	CONADDi	15.179	Additive connectives incidence
+57	CNCPos	n/a	18.215	Positive connectives incidence
+58	CNCNeg	n/a	52.823	Negative connectives incidence
+59	SMCAUSv	CAUSV	8.5	Causal verb incidence
+60	SMCAUSvp	CAUSVP	24.894	Causal verbs and causal particles incidence
+61	SMINTEp	INTEi	8.5	Intentional verbs incidence
+62	SMCAUSr	CAUSC	1.800	Ratio of casual particles to causal verbs
+63	SMINTEr	INTEC	2.467	Ratio of intentional particles to intentional verbs
+64	SMCAUSlsa	CAUSLSA	0.089	LSA verb overlap
+65	SMCAUSwn	CAUSWN	0.443	WordNet verb overlap
+66	SMTEMP	TEMPta	0.755	Temporal cohesion, tense and aspect repetition, mean
+67	SYNLE	SYNLE	4.400	Left embeddedness, words before main verb, mean
+68	SYNNP	SYNNP	0.842	Number of modifiers per noun phrase, mean
+69	SYNMEDpos	MEDwtm	0.690	Minimal Edit Distance, part of speech
+70	SYNMEDwrd	MEDawm	0.897	Minimal Edit Distance, all words
+71	SYNMEDlem	MEDalm	0.880	Minimal Edit Distance, lemmas
+72	SYNSTRUTa	STRUTa	0.080	Sentence syntax similarity, adjacent sentences, mean
+73	SYNSTRUTt	STRUTt	0.041	Sentence syntax similarity, all combinations, across paragraphs, mean
+74	DRNP	n/a	360.656	Noun phrase density, incidence
+75	DRVP	n/a	225.865	Verb phrase density, incidence
+76	DRAP	n/a	36.430	Adverbial phrase density, incidence
+77	DRPP	n/a	93.503	Preposition phrase density, incidence
+78	DRPVAL	AGLSPSVi	3.643	Agentless passive voice density, incidence
+79	DRNEG	DENNEGi	3.643	Negation density, incidence
+80	DRGERUND	GERUNDi	16.393	Gerund density, incidence
+81	DRINF	INFi	23.072	Infinitive density, incidence
+82	WRDNOUN	NOUNi	246.508	Noun incidence
+83	WRDVERB	VERBi	117.789	Verb incidence
+84	WRDADJ	ADJi	78.325	Adjective incidence
+85	WRDADV	ADVi	60.716	Adverb incidence
+86	WRDPRO	DENPRPi	76.503	Pronoun incidence
+87	WRDPRP1s	n/a	7.893	First person singular pronoun incidence
+88	WRDPRP1p	n/a	22.465	First person plural pronoun incidence
+89	WRDPRP2	PRO2i	6.679	Second person pronoun incidence
+90	WRDPRP3s	n/a	0.607	Third person singular pronoun incidence
+91	WRDPRP3p	n/a	17.001	Third person plural pronoun incidence
+92	WRDFRQc	FRCLacwm	2.341	CELEX word frequency for content words, mean
+93	WRDFRQa	FRCLaewm	3.070	CELEX Log frequency for all words, mean
+94	WRDFRQmc	FRCLmcsm	1.858	CELEX Log minimum frequency for content words, mean
+95	WRDAOAc	WRDAacwm	356.014	Age of acquisition for content words, mean
+96	WRDFAMc	WRDFacwm	579.870	Familiarity for content words, mean
+97	WRDCNCc	WRDCacwm	349.291	Concreteness for content words, mean
+98	WRDIMGc	WRDIacwm	389.966	Imagability for content words, mean
+99	WRDMEAc	WRDMacwm	423.785	Meaningfulness, Colorado norms, content words, mean
+100	WRDPOLc	POLm	3.956	Polysemy for content words, mean
+101	WRDHYPn	HYNOUNaw	5.014	Hypernymy for nouns, mean
+102	WRDHYPv	HYVERBaw	1.454	Hypernymy for verbs, mean
+103	WRDHYPnv	HYPm	1.384	Hypernymy for nouns and verbs, mean
+104	RDFRE	READFRE	45.486	Flesch Reading Ease
+105	RDFKGL	READFKGL	15.098	Flesch-Kincaid Grade level
+106	RDL2	L2	16.501	Coh-Metrix L2 Readability

@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 
 # Importing data
 Trump = pd.read_csv(
-    "/Users/riccardodalcero/Library/CloudStorage/OneDrive-UniversitaCattolicaSacroCuore-ICATT/Materials/RA/Data/5_TrumpwithCohmetrix.csv"
+    "/Users/riccardodalcero/Library/CloudStorage/OneDrive-UniversitaCattolicaSacroCuore-ICATT/Materials/RA/Data/6_TrumpwithCohmetrix.csv"
 )
 
 # Convert the string column to datetime
@@ -81,4 +81,4 @@ output_data = {"EPU": Z_weekly, "SYN": X_weekly, "Sent": Y_weekly}
 Z = pd.DataFrame(output_data, index=weeklyDates)
 
 # Write the output to a CSV file
-Z.to_csv("output.csv")
+Z.to_csv("Data/6_TrumpwithCohmetrix_freq.csv")
