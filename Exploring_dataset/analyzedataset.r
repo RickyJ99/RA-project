@@ -1,6 +1,6 @@
 setwd("/Users/riccardodalcero/Library/CloudStorage/OneDrive-UniversitaCattolicaSacroCuore-ICATT/Materials/RA/")
 
-data <- read.csv("Data/6_TrumpwithCohmetrix.csv", header = TRUE)
+data <- read.csv("/Users/riccardodalcero/Library/CloudStorage/OneDrive-UniversitaCattolicaSacroCuore-ICATT/Materials/RA/Data/6_TrumpwithCohmetrix.csv", header = TRUE)
 View(data)
 attach(data)
 result <- sum(nchar(QA) > 0)

@@ -43,3 +43,7 @@ Fixing the dataset
 1. Try to tackle the issue with mixed frequency 
 2. build a code in matlab that takes the weekly avarages 
 3. write in python the same code in order to be consistent 
+
+--Sept23--
+1. adj the issue with the weekly avarages computation
+2. try to use a syntetih control
