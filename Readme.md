@@ -1,45 +1,106 @@
 ## Overview
 
-This repository contains code and resources for a project that uses NLP AI to extract economic narratives. The repository is organized into several folders: `Code_From Download to Dataset`, `Data`, `Exploring_dataset`, and `Literature review`.
+This repository contains code and resources for a project that uses NLP and AI models to extract economic narratives
+from White House speech transcripts (Trump and Biden administrations). The pipeline downloads raw speeches, cleans
+them, applies sentiment and topic analysis, merges syntactic readability indices from CohMetrix, and produces weekly
+time-series data ready for VAR/SVAR estimation in MATLAB or R.
+
+---
 
 ## `Code_From Download to Dataset`
 
-This folder contains all the code and resources necessary to obtain four databases, including one that contains all speeches with their respective AI and UI indices. The following is a brief summary of each file:
+This folder contains the full data pipeline. Run the scripts in numbered order.
 
-- `1_Get_speech_dataset.ipynb`: This code downloads all speeches for the Trump and Biden administrations from the White House and saves them in `Data/dataset1_onlyrawdatadownloaded.csv`. It also saves a file called `url_speeches.txt` with all the links where it downloaded the speeches.
+### Step 1 — Download speeches
 
-- `1_a_urlextraction.ipynb`: This file reads the file `url_speeches.txt` and returns the dataset. If you have a list of URLs from the White House and you want to download them, you can run this code.
+- **`1_Get_speech_dataset.ipynb`**: Downloads all speeches for the Trump and Biden administrations from the White
+  House website and saves them in `Data/dataset1_onlyrawdatadownloaded.csv`. Also saves `url_speeches.txt` with
+  every URL visited.
 
-- `2_extraction_info.ipynb`: This code uses NLP analysis to extract specific information from a speech, such as the location, time, speaker name, and date. It performs data cleaning, preprocessing, and feature extraction tasks using libraries such as `pandas`, `nltk`, `gensim`, and `spacy`.
+- **`1_a_urlextraction.py`**: Alternative entry point. Reads `url_speeches.txt` and re-downloads speeches from a
+  custom list of White House URLs.
 
-- `3_cleaning_data.ipynb`: This code imports the `pandas` and `re` modules and reads a CSV file named `2_Data_after_infoextraolated.csv` using `pandas`' `read_csv()` function. It defines three functions to clean the text data, and then modifies the "Main text" column of the data frame by calling these functions. The modified data frame is saved to a new CSV file named `3_Data_after_cleaningdata.csv`.
+### Step 2 — Extract metadata
 
-- `4_AI_analysis.ipynb`: This code uses four BERT models to extract insightful information about narratives from the given dataframe:
-    1. LatentDirichletAllocation model for topic extraction
-    2. `heBERT_sentiment_analysis` for sentiment analysis that returns three indices reflecting the sentiment
-    3. `en_core_web_lg` for thematic analysis to classify different narratives
-    4. `heBERT_sentiment_analysis` with FED uncertainty for sentiment analysis.
-    The output is saved in `Data/4_Data_with_AI_Market_Indicies.csv`.
+- **`2_extraction info.py`**: Uses NLP (spaCy, NLTK, gensim) to extract structured metadata from each speech:
+  location, date, speaker name, and administration. Output: `Data/2_Data_after_infoextraolated.csv`.
 
-- `5_*.`: This code is useful to prepare the data in order to be processed by the Cohmetrix software (online and
-  offline), and then to return the dataset merging the output with the dataset.
-    1. `5_a_preprocessing_for_grammar.py`: This code imports the necessary libraries and defines a function called limit_text that cleans and limits the length of a given text. It then reads a CSV file into a Pandas DataFrame, filters the DataFrame based on specific conditions, creates a folder to store text files, iterates over the filtered DataFrame, preprocesses the text, and saves each preprocessed text as a separate text file in the output folder.
-    2. `5_b_grammar_tool.py`: This code open the browser and put the text to be process in the textbox, the using AI try
-       to tackle the captcha and after download the results
-    3. `5_c_fromtxttocsv.py`:from Cohmetrix output to csv, given as input the folder that contains the Cohmetrix output of our dataset (in
-        this case only for the Trump dataset) the program returns a csv that merge the dataset of trump speech and the
-        outcome for each speech in cohmetrix
+### Step 3 — Clean text
+
+- **`3_cleaning data.py`**: Reads `2_Data_after_infoextraolated.csv` and applies three cleaning steps in sequence:
+  1. Strips the website boilerplate header (`remove_sentence`)
+  2. Splits the main speech body from the Q&A transcript (`split_text`) — Q&A is stored separately in the `QA` column
+  3. Removes location/time-stamp patterns (Brady Briefing Room stamps, Air Force One headers, etc.) from the cleaned
+     body text (`remove_pattern`)
+
+  Output: `Data/3_Data_after_cleaningdata.csv`.
+
+### Step 4 — AI analysis
+
+- **`4_AI_analysis.ipynb`** — Single notebook for the full AI analysis:
+  1. LDA topic modeling + word clouds (sklearn) on Trump 2020 press briefings
+  2. DistilBERT binary sentiment score (`sentiment_score`, range −1 to +1) for all speeches
+  3. heBERT 3-class sentiment (`sentiment_score_positive/neutral/negative`) for all speeches
+  4. Gensim LDA thematic analysis on Trump 2020 press briefings
+  5. Economic Policy Uncertainty (EPU) and Equity Market Uncertainty (EMU) indices merged from FRED
+  6. Sentiment vs. EPU correlation and time-series plots
+
+  **Requires** `FRED_API_KEY` environment variable (free key at https://fred.stlouisfed.org/docs/api/api_key.html).
+  Output: `Data/4_Data_with_AI_Market_Indicies.csv`.
+
+### Step 5 — CohMetrix grammar indices
+
+- **`5_grammar_pipeline.ipynb`** — Single notebook for the full CohMetrix pipeline:
+  1. **Text preparation** — filter Trump 2020 press briefings, clean with `limit_text()`, save one `.txt` per
+     speech to `processed_texts/`
+  2. **Web automation** — Selenium + Tesseract OCR submits texts to the CohMetrix web interface at
+     Memphis University (`http://141.225.61.35/CohMetrix2017/`). The `run_cohmetrix()` call is commented out
+     by default; uncomment only when the server is reachable and the session is supervised.
+  3. **Merge output** — reads all `CohMetrixOutput (N).txt` files, transposes metrics, merges with the Trump
+     2020 speech dataset by record order. Output: `Data/6_TrumpwithCohmetrix.csv`.
+
+### Step 6 — Weekly frequency adjustment
+
+- **`6_frequencyadjustment.py`**: Aggregates the daily speech-level data to weekly averages for three series:
+  - `EPU` — Economic Policy Uncertainty index
+  - `SYN` — Syntactic complexity (SYNLE from CohMetrix)
+  - `Sent` — DistilBERT sentiment score
+
+  Output: `Data/6_TrumpwithCohmetrix_freq.csv`. This file is the direct input to the VAR/SVAR model in MATLAB.
+
+---
+
 ## `Data`
 
-This folder contains all the datasets saved after running the respective Python code. For example, dataset 3 is the output of the code 3 in the folder `Code_From Download to Dataset`.
+Intermediate and final datasets, one CSV per pipeline step:
+
+| File | Contents |
+|------|----------|
+| `dataset1_onlyrawdatadownloaded.csv` | Raw speech text + URL |
+| `2_Data_after_infoextraolated.csv` | + extracted metadata |
+| `3_Data_after_cleaningdata.csv` | + cleaned speech body and QA column |
+| `4_Data_with_AI_Market_Indicies.csv` | + sentiment scores + EPU/EMU indices |
+| `6_TrumpwithCohmetrix.csv` | Trump 2020 speeches + all CohMetrix indices |
+| `6_TrumpwithCohmetrix_freq.csv` | Weekly averages of EPU, SYN, Sent |
+
+---
 
 ## `Exploring_dataset`
 
-This folder contains R code to get a quick view of the dataset and the properties of the time series.
+R scripts for exploratory data analysis: summary statistics, stationarity tests, and preliminary time-series plots.
+
+---
+
+## `VAR`
+
+MATLAB code and output for the Structural VAR model. The Cholesky decomposition ordering is:
+EPU → SYN → Sent (uncertainty shock → speech complexity → sentiment).
+
+---
 
 ## `Literature review`
 
-This folder contains scientific articles that use a similar method and the citations for the AI models used in the project.
-
-## `VAR`
-In this folder there are the output of the matlab elaboration of VAR
+Scientific articles that use similar NLP-based narrative extraction methods, and model cards for the AI models used:
+- `avichr/heBERT_sentiment_analysis` (3-class sentiment)
+- `distilbert-base-uncased-finetuned-sst-2-english` (binary sentiment)
+- `en_core_web_lg` (spaCy NER/lemmatization)

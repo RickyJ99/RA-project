@@ -1,84 +1,57 @@
 import pandas as pd
 import numpy as np
-from datetime import datetime, timedelta
+import matplotlib.pyplot as plt
+from datetime import timedelta
 
-# Importing data
-Trump = pd.read_csv(
-    "/Users/riccardodalcero/Library/CloudStorage/OneDrive-UniversitaCattolicaSacroCuore-ICATT/Materials/RA/Data/6_TrumpwithCohmetrix.csv"
-)
+DATA_PATH = "Data/6_TrumpwithCohmetrix.csv"
+OUTPUT_PATH = "Data/6_TrumpwithCohmetrix_freq.csv"
 
-# Convert the string column to datetime
+Trump = pd.read_csv(DATA_PATH)
+
+# tz_convert(None) strips timezone info from tz-aware datetimes;
+# tz_localize(None) would raise TypeError on already-aware series.
 Trump["Date Time"] = pd.to_datetime(
     Trump["Date Time"], format="%Y-%m-%d %H:%M:%S%z"
-).dt.tz_localize(None)
-Trump = Trump.iloc[1:]  # eliminate the first row containing the title
+).dt.tz_convert(None)
 
-# Setting as time index
 Trump = Trump.set_index("Date Time")
 
-# Assuming X and DateTime are already defined
-X = Trump["SYNLE"]
-
-# Convert DateTime to a datetime array
 DateTime = pd.to_datetime(Trump.index.date)
 
-# Define the start and end dates for each week
-startWeek = pd.date_range(start=min(DateTime), end=max(DateTime), freq="7D")
+startWeek = pd.date_range(start=DateTime.min(), end=DateTime.max(), freq="7D")
 endWeek = startWeek + timedelta(days=6)
 
-# Initialize arrays to store weekly averages and corresponding dates
-weeklyAverages = np.zeros(len(startWeek))
-weeklyDates = startWeek
+n_weeks = len(startWeek)
+X_weekly = np.zeros(n_weeks)
+Y_weekly = np.zeros(n_weeks)
+Z_weekly = np.zeros(n_weeks)
 
-# Calculate weekly averages
-for i in range(len(startWeek)):
-    # Find indices of observations within the current week
-    weekIndices = (DateTime >= startWeek[i]) & (DateTime <= endWeek[i])
-
-    # Calculate the average of X within the current week
-    weeklyAverages[i] = np.mean(X[weekIndices])
-
-X_weekly = weeklyAverages
-
-# Display the weekly averages and corresponding dates
-print("Weekly Averages:")
-print(weeklyAverages)
-print("Dates:")
-print(weeklyDates)
-
-# Plot the weekly averages
-import matplotlib.pyplot as plt
-
-plt.plot(weeklyDates, weeklyAverages)
-plt.show()
-
+X = Trump["SYNLE"]
 Y = Trump["sentiment_score"]
-
-# Calculate weekly averages for Y
-for i in range(len(startWeek)):
-    # Find indices of observations within the current week
-    weekIndices = (DateTime >= startWeek[i]) & (DateTime <= endWeek[i])
-
-    # Calculate the average of Y within the current week
-    weeklyAverages[i] = np.mean(Y[weekIndices])
-
-Y_weekly = weeklyAverages
-
 Z = Trump["UI"]
 
-# Calculate weekly averages for Z
-for i in range(len(startWeek)):
-    # Find indices of observations within the current week
-    weekIndices = (DateTime >= startWeek[i]) & (DateTime <= endWeek[i])
+for i in range(n_weeks):
+    mask = (DateTime >= startWeek[i]) & (DateTime <= endWeek[i])
+    X_weekly[i] = np.nanmean(X[mask])
+    Y_weekly[i] = np.nanmean(Y[mask])
+    Z_weekly[i] = np.nanmean(Z[mask])
 
-    # Calculate the average of Z within the current week
-    weeklyAverages[i] = np.mean(Z[weekIndices])
+print("Weekly Averages (SYNLE):")
+print(X_weekly)
+print("Dates:")
+print(startWeek)
 
-Z_weekly = weeklyAverages
+plt.figure()
+plt.plot(startWeek, X_weekly)
+plt.xlabel("Date")
+plt.ylabel("SYNLE (weekly avg)")
+plt.title("Syntactic complexity — weekly averages")
+plt.tight_layout()
+plt.show()
 
-# Create the output timetable
-output_data = {"EPU": Z_weekly, "SYN": X_weekly, "Sent": Y_weekly}
-Z = pd.DataFrame(output_data, index=weeklyDates)
-
-# Write the output to a CSV file
-Z.to_csv("Data/6_TrumpwithCohmetrix_freq.csv")
+output = pd.DataFrame(
+    {"EPU": Z_weekly, "SYN": X_weekly, "Sent": Y_weekly},
+    index=startWeek,
+)
+output.to_csv(OUTPUT_PATH)
+print(f"Saved weekly data → {OUTPUT_PATH}")
